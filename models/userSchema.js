@@ -42,7 +42,7 @@ userSchema.methods.generateAuthToken = function() {
   }, config.JWT_SECRET, {});
 }
 
-const User = mongose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
 
 const userValidate = (user) => {
   const validateSchema = {

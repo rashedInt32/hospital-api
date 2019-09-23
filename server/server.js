@@ -1,9 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import throng from 'throng';
+import { ApolloServer } from 'apollo-server-express';
+
+import schema from '../graphql/executableSchema';
 
 import { config } from '../config';
-
 import { db } from '../db/connect';
 
 const dbUri = config.DB_URI;
@@ -21,8 +23,15 @@ const startApp = () => {
   app.use(bodyParser.urlencoded({ extended: false }));
   app.use(bodyParser.json());
 
-  // respond with "hello world" when a GET request is made to the homepage
-  app.get("/", (req, res) => res.json({ msg: "hello " }));
+
+  // Apollo server
+  const server = new ApolloServer({
+    schema
+  });
+
+  const path = '/graphql';
+  server.applyMiddleware({app, path})
+
 
   // PORT
   const PORT = process.env.PORT || 3900;
