@@ -3,8 +3,9 @@ import { merge } from 'lodash';
 
 import {
   typeDef as userQuery,
-  resolvers as userResolvers
-} from './schema/userGqlSchema';
+  resolvers as userResolvers,
+  userMutation
+} from "./schema/userGqlSchema";
 
 const Query = `
   type Query {
@@ -22,8 +23,8 @@ const Query = `
 
 const resolvers = {
   Query: merge(userResolvers),
-  //Mutation: merge()
-}
+  Mutation: merge(userMutation)
+};
 
 const rootQuery = makeExecutableSchema({
   typeDefs: [Query, userQuery],

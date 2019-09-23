@@ -17,7 +17,10 @@ const startApp = () => {
   const app = express();
 
   // Connect db
-  db.connect(dbUri, { useNewUrlParser: true });
+  db.connect(dbUri, {
+    useNewUrlParser: true,
+    useCreateIndex: true
+  });
 
   // Initialize body parser
   app.use(bodyParser.urlencoded({ extended: false }));
@@ -26,7 +29,17 @@ const startApp = () => {
 
   // Apollo server
   const server = new ApolloServer({
-    schema
+    schema,
+    formatError: (err) => {
+      // Don't give the specific errors to the client.
+      if (err.message.startsWith("Database Error: ")) {
+        return new Error('Internal server error');
+      }
+
+      // Otherwise return the original error.  The error can also
+      // be manipulated in other ways, so long as it's returned.
+      return err;
+    },
   });
 
   const path = '/graphql';
