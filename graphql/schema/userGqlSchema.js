@@ -37,7 +37,6 @@ const userMutation = {
     const { userInput } = args;
 
     let user = await User.find({ email: userInput.email });
-    console.log(user);
     if (user.length > 0)
       return new Error("Email alread exist.");
 
