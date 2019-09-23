@@ -24,7 +24,7 @@ const typeDef = `
   }
 
   extend type Mutation {
-    addUser(userInput: CreateUser!): User!
+    addUser(userInput: CreateUser!): String!
   }
 `
 
@@ -48,7 +48,9 @@ const userMutation = {
 
     await user.save();
 
-    return user;
+    const token = user.generateAuthToken();
+
+    return token;
   }
 }
 
