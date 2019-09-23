@@ -1,10 +1,11 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 
+import { config } from '../config';
+
 import { db } from '../db/connect';
 
-const dbUri = 'mongodb://localhost/express-graphql';
-
+const dbUri = config.DB_URI;
 
 // Initialize express
 const app = express();
