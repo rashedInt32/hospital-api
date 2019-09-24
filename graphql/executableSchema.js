@@ -7,6 +7,12 @@ import {
   userMutation
 } from "./schema/userGqlSchema";
 
+import {
+  typeDef as hospitalQuery,
+  resolvers as hospitalResolvers,
+  hospitalMutation
+} from "./schema/hospitalGqlSchema";
+
 const Query = `
   type Query {
     _empty: String
@@ -22,12 +28,12 @@ const Query = `
 `;
 
 const resolvers = {
-  Query: merge(userResolvers),
-  Mutation: merge(userMutation)
+  Query: merge(userResolvers, hospitalResolvers),
+  Mutation: merge(userMutation, hospitalMutation)
 };
 
 const rootQuery = makeExecutableSchema({
-  typeDefs: [Query, userQuery],
+  typeDefs: [Query, userQuery, hospitalQuery],
   resolvers: merge(resolvers)
 });
 

@@ -1,6 +1,5 @@
 import bcrypt from 'bcryptjs';
 import { User } from '../../models/userSchema';
-import { isMaster } from 'cluster';
 
 const typeDef = `
   input CreateUser {
