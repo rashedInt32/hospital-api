@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { ApolloError } from 'apollo-server-express';
 import { User } from '../../models/userSchema';
+import { isMaster } from 'cluster';
 
 const typeDef = `
   input CreateUser {
@@ -25,6 +25,7 @@ const typeDef = `
 
   extend type Mutation {
     addUser(userInput: CreateUser!): String!
+    authUser(email: String!, password: String!): String!
   }
 `
 
@@ -45,11 +46,24 @@ const userMutation = {
     userInput.password = hashed;
 
     user = new User(userInput);
-
     await user.save();
 
     const token = user.generateAuthToken();
+    return token;
+  },
 
+  async authUser(_, args) {
+    const { email, password } = args;
+
+    let user = await User.findOne({ email });
+    if (!user)
+      return new Error("Email not found");
+
+    let isPasswordMatch = bcrypt.compare(password, user.password);
+    if (!isPasswordMatch)
+      return new Error("Password not match");
+
+    const token = user.generateAuthToken();
     return token;
   }
 }
