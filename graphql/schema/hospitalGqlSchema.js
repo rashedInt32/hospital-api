@@ -40,7 +40,12 @@ const hospitalMutation = {
     await hospital.save();
 
     return hospital;
-  }
+  },
+
+  // updateHospital: async (_, args) => {
+  //   let hospital = await Hospital.findById(id);
+
+  // }
 }
 
 export { typeDef, resolvers, hospitalMutation };
