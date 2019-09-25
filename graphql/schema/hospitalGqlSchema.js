@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import { Hospital } from '../../models/hospitalSchema';
+import { union } from 'lodash';
 
 const typeDef = gql`
   input CreateHospital {
@@ -58,7 +59,7 @@ const hospitalMutation = {
     hospital.set({
       name: update.name,
       location: update.location,
-      specialties: hospital.specialties.concat(update.specialties),
+      specialties: union(hospital.specialties, update.specialties),
     });
 
     await hospital.save();
