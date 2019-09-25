@@ -1,6 +1,7 @@
+import { gql } from 'apollo-server-express';
 import { Hospital } from '../../models/hospitalSchema';
 
-const typeDef = `
+const typeDef = gql`
   input CreateHospital {
     name: String!,
     location: String!,
@@ -8,6 +9,13 @@ const typeDef = `
     coverphoto: String,
     specialties: [String],
     doctors: [String]
+  }
+
+  input UpdateHospital {
+    name: String,
+    location: String,
+    #doctors: [String],
+    specialties: [String]
   }
 
   type Hospital {
@@ -26,6 +34,7 @@ const typeDef = `
 
   extend type Mutation {
     addHospital(hospitalInput: CreateHospital!): Hospital
+    updateHospital(id: ID!, update: UpdateHospital!): Hospital
   }
 `;
 
@@ -42,10 +51,20 @@ const hospitalMutation = {
     return hospital;
   },
 
-  // updateHospital: async (_, args) => {
-  //   let hospital = await Hospital.findById(id);
+  updateHospital: async (_, args) => {
+    const { id, update } = args;
+    let hospital = await Hospital.findById(id);
 
-  // }
+    hospital.set({
+      name: update.name,
+      location: update.location,
+      specialties: hospital.specialties.concat(update.specialties),
+    });
+
+    await hospital.save();
+
+    return hospital;
+  }
 }
 
 export { typeDef, resolvers, hospitalMutation };
