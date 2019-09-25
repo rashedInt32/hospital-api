@@ -15,7 +15,7 @@ const typeDef = gql`
   input UpdateHospital {
     name: String,
     location: String,
-    #doctors: [String],
+    doctors: [String],
     specialties: [String]
   }
 
@@ -60,6 +60,7 @@ const hospitalMutation = {
       name: update.name,
       location: update.location,
       specialties: union(hospital.specialties, update.specialties),
+      doctos: union(hospital.doctors, update.doctors)
     });
 
     await hospital.save();
