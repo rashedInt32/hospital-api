@@ -58,7 +58,7 @@ const userMutation = {
     if (!user)
       return new Error("Email not found");
 
-    let isPasswordMatch = bcrypt.compare(password, user.password);
+    let isPasswordMatch = bcrypt.compareSync(password, user.password);
     if (!isPasswordMatch)
       return new Error("Password not match");
 
