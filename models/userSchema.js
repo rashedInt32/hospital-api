@@ -58,4 +58,17 @@ const userValidate = (user) => {
   return Joi.validate(user, validateSchema);
 }
 
-export { User, userValidate };
+const authValidate = user => {
+  const validateSchema = {
+    email: Joi.string()
+      .required()
+      .email(),
+    password: Joi.string()
+      .required(),
+  };
+
+  return Joi.validate(user, validateSchema);
+};
+
+
+export { User, userValidate, authValidate };

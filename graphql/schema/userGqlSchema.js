@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { User, userValidate } from "../../models/userSchema";
+import { User, userValidate, authValidate } from "../../models/userSchema";
 
 const typeDef = `
   input CreateUser {
@@ -56,6 +56,9 @@ const userMutation = {
 
   async authUser(_, args) {
     const { email, password } = args;
+
+    const { error } = authValidate(args);
+    if (error) return new Error(error.details[0].message);
 
     let user = await User.findOne({ email });
     if (!user)
