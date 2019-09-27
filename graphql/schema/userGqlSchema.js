@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { User } from '../../models/userSchema';
+import { User, userValidate } from "../../models/userSchema";
 
 const typeDef = `
   input CreateUser {
@@ -35,6 +35,9 @@ const resolvers = {
 const userMutation = {
   async addUser(_, args) {
     const { userInput } = args;
+
+    const { error } = userValidate(userInput);
+    if (error !==null) return new Error(error.details[0].message);
 
     let user = await User.find({ email: userInput.email });
     if (user.length > 0)
