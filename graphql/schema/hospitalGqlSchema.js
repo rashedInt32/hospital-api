@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express';
-import { Hospital } from '../../models/hospitalSchema';
+import { Hospital, validateHospital } from '../../models/hospitalSchema';
 import { union } from 'lodash';
 
 const typeDef = gql`
@@ -46,6 +46,11 @@ const resolvers = {
 const hospitalMutation = {
   addHospital: async (_, args) => {
     const { hospitalInput } = args;
+
+    const { error } = validateHospital(hospitalInput);
+    if (error)
+      return new Error(error.details[0].message);
+
     let hospital = new Hospital(hospitalInput);
     await hospital.save();
 

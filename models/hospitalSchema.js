@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Joi from 'joi';
 
 const hospitalSchema = new mongoose.Schema({
   name: {
@@ -18,7 +19,14 @@ const hospitalSchema = new mongoose.Schema({
   coverPhoto: String
 })
 
-
 const Hospital = mongoose.model('Hospital', hospitalSchema);
 
-export { Hospital };
+const validateHospital = (hospital) => {
+  const schema = {
+    name: Joi.string().required()
+  }
+
+  return Joi.validate(hospital, schema);
+}
+
+export { Hospital, validateHospital };
