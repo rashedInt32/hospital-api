@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
   role: {
     type: String,
     required: true
+  },
+  hospital: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Hospital'
   }
 });
 
@@ -53,6 +57,7 @@ const userValidate = (user) => {
     email: Joi.string().min(5).max(50).required().email(),
     password: Joi.string().min(5).max(1024).required(),
     role: Joi.string().required(),
+    hospital: Joi.string().required()
   }
 
   return Joi.validate(user, validateSchema);

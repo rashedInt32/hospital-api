@@ -8,7 +8,7 @@ const typeDef = `
     email: String!,
     role: String!
     password: String!
-    hostpitalName: String!
+    hospital: ID!
   }
   type User {
     id: ID!,
@@ -17,7 +17,7 @@ const typeDef = `
     email: String!,
     role: String!
     password: String!
-    hostpitalName: String!
+    hospital: Hospital!
   }
 
   extend type Query {
@@ -28,7 +28,7 @@ const typeDef = `
     addUser(userInput: CreateUser!): String!
     authUser(email: String!, password: String!): String!
   }
-`
+`;
 
 const resolvers = {
   users: async () => await User.find(),
