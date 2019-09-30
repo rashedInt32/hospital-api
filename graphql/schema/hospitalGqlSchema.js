@@ -5,7 +5,7 @@ import { union } from 'lodash';
 const typeDef = gql`
   input CreateHospital {
     name: String!,
-    location: String!,
+    location: String,
     logo: String,
     coverphoto: String,
     specialties: [String],
@@ -22,7 +22,7 @@ const typeDef = gql`
   type Hospital {
     id: ID!,
     name: String!,
-    location: String!,
+    location: String,
     logo: String,
     coverphoto: String,
     specialties: [String],
@@ -34,7 +34,7 @@ const typeDef = gql`
   }
 
   extend type Mutation {
-    addHospital(hospitalInput: CreateHospital!): Hospital
+    addHospital(hospital: CreateHospital!): Hospital
     updateHospital(id: ID!, update: UpdateHospital!): Hospital
   }
 `;
@@ -44,20 +44,20 @@ const resolvers = {
 }
 
 const hospitalMutation = {
-  addHospital: async (_, args) => {
-    const { hospitalInput } = args;
+  async addHospital (_, args) {
+    const { hospital } = args;
 
-    const { error } = validateHospital(hospitalInput);
+    const { error } = validateHospital(hospital);
     if (error)
       return new Error(error.details[0].message);
 
-    let hospital = new Hospital(hospitalInput);
-    await hospital.save();
+    let newHospital = new Hospital(hospital);
+    await newHospital.save();
 
-    return hospital;
+    return newHospital;
   },
 
-  updateHospital: async (_, args) => {
+  async updateHospital(_, args) {
     const { id, update } = args;
     let hospital = await Hospital.findById(id);
 

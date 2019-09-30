@@ -10,10 +10,9 @@ const hospitalSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Doctor'
   }],
-  specialties: [{type: String, required: true}],
+  specialties: [{type: String}],
   location: {
     type: String,
-    required: true
   },
   logo: String,
   coverPhoto: String
