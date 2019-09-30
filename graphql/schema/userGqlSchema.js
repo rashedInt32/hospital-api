@@ -8,6 +8,7 @@ const typeDef = `
     email: String!,
     role: String!
     password: String!
+    hostpitalName: String!
   }
   type User {
     id: ID!,
@@ -16,6 +17,7 @@ const typeDef = `
     email: String!,
     role: String!
     password: String!
+    hostpitalName: String!
   }
 
   extend type Query {
