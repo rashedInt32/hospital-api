@@ -31,6 +31,7 @@ const typeDef = gql`
 
   extend type Query {
     hospitals: [Hospital!]
+    hospital(id: ID!): Hospital!
   }
 
   extend type Mutation {
@@ -41,6 +42,8 @@ const typeDef = gql`
 
 const resolvers = {
   hospitals: async () => await Hospital.find(),
+  hospital: async (_, { id }) =>
+    await Hospital.findById(id),
 }
 
 const hospitalMutation = {
