@@ -2,6 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import { ApolloServer } from "apollo-server-express";
 
+import verifyToken from '../utils/verifyToken';
+
 import schema from "../graphql/executableSchema";
 
 import { config } from "../config";
@@ -28,7 +30,11 @@ const server = new ApolloServer({
   formatError: err => ({
     message: err.message,
     status: err.status
-  })
+  }),
+  context: async ({ req, res }) => {
+    const user = await verifyToken(req, res);
+    console.log(user);
+  }
 });
 
 const path = "/graphql";
