@@ -41,7 +41,11 @@ const typeDef = gql`
 `;
 
 const resolvers = {
-  hospitals: async () => await Hospital.find(),
+  hospitals: async (_, args, context) => {
+    if (context.role !== 'superadmin')
+      return new Error('You don\'t have permission');
+    return await Hospital.find();
+  },
   hospital: async (_, { id }) =>
     await Hospital.findById(id),
 }
