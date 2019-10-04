@@ -34,7 +34,11 @@ const resolvers = {
 
 const rootQuery = makeExecutableSchema({
   typeDefs: [Query, userQuery, hospitalQuery],
-  resolvers: merge(resolvers)
+  resolvers: merge(resolvers),
+  uploads: {
+    maxFileSize: 10000000, // 10 MB
+    maxFiles: 20
+  }
 });
 
 export default rootQuery;
