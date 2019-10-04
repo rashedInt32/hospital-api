@@ -31,13 +31,13 @@ const server = new ApolloServer({
     message: err.message,
     status: err.status
   }),
-  // context: ({ req, res }) => {
-  //   const user = async () => {
-  //     const user = await verifyToken(req, res);
-  //     return user;
-  //   };
-  //   return user();
-  // }
+  context: ({ req, res }) => {
+    const user = async () => {
+      const user = await verifyToken(req, res);
+      return user;
+    };
+    return user();
+  }
 });
 
 const path = "/graphql";
