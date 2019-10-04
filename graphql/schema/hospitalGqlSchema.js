@@ -1,6 +1,6 @@
-import { gql } from 'apollo-server-express';
-import { Hospital, validateHospital } from '../../models/hospitalSchema';
-import { union } from 'lodash';
+import { gql } from "apollo-server-express";
+import { Hospital, validateHospital } from "../../models/hospitalSchema";
+import { union } from "lodash";
 
 import path from "path";
 import { createWriteStream } from "fs";
@@ -54,8 +54,8 @@ const typeDef = gql`
 
 const resolvers = {
   hospitals: async (_, args, context) => {
-    if (context.role !== "superadmin")
-      return new Error("You don't have permission");
+    // if (context.role !== "superadmin")
+    //   return new Error("You don't have permission");
     return await Hospital.find();
   },
   hospital: async (_, { id }) => await Hospital.findById(id),
@@ -64,12 +64,11 @@ const resolvers = {
 };
 
 const hospitalMutation = {
-  async addHospital (_, args) {
+  async addHospital(_, args) {
     const { hospital } = args;
 
     const { error } = validateHospital(hospital);
-    if (error)
-      return new Error(error.details[0].message);
+    if (error) return new Error(error.details[0].message);
 
     let newHospital = new Hospital(hospital);
     await newHospital.save();
@@ -94,35 +93,25 @@ const hospitalMutation = {
   },
 
   async singleUpload(_, { file }) {
-    const { stream, filename, mimetype, encoding } = await file;
-
-    console.log(stream)
-
+    const { createReadStream, filename, mimetype, encoding } = await file;
 
     // await new Promise(res =>
-    //   check
-    //     .pipe(createWriteStream(path.join(__dirname, "../../uploads", filename)))
+    //   createReadStream()
+    //     .pipe(
+    //       createWriteStream(path.join(__dirname, "../../uploads", filename))
+    //     )
     //     .on("close", res)
     // );
 
-    console.log(stream);
+    const fileRead = await createReadStream(file);
 
-    // const fileRead = stream.createReadStream(file);
+    const newfile = createWriteStream(path.join(__dirname, "../../uploads", filename));
+    await fileRead.pipe(newfile);
 
-    // const newfile = stream.createWriteStream("./uploads/");
-    // fileRead.pipe(newfile);
-
-    // 1. Validate file metadata.
-
-    // 2. Stream file contents into cloud storage:
-    // https://nodejs.org/api/stream.html
-
-    // 3. Record the file upload in your DB.
-    // const id = await recordFile( … )
-    console.log(filename, mimetype, encoding);
+    console.log(createReadStream, filename, mimetype, encoding);
 
     return { filename, mimetype, encoding };
   }
-}
+};
 
 export { typeDef, resolvers, hospitalMutation };
