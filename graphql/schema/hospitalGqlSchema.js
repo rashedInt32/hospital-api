@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
-import { union } from "lodash";
+import { union, last } from "lodash";
 
 import path from "path";
 import { createWriteStream } from "fs";
@@ -95,20 +95,15 @@ const hospitalMutation = {
   async singleUpload(_, { file }) {
     const { createReadStream, filename, mimetype, encoding } = await file;
 
-    // await new Promise(res =>
-    //   createReadStream()
-    //     .pipe(
-    //       createWriteStream(path.join(__dirname, "../../uploads", filename))
-    //     )
-    //     .on("close", res)
-    // );
-
     const fileRead = await createReadStream(file);
 
-    const newfile = createWriteStream(path.join(__dirname, "../../uploads", filename));
-    await fileRead.pipe(newfile);
+    let renameFile = filename.split('.');
+    renameFile = 'name.' + last(renameFile);
 
-    console.log(createReadStream, filename, mimetype, encoding);
+    const newfile = createWriteStream(
+      path.join(__dirname, "../../uploads", filename)
+    );
+    await fileRead.pipe(newfile);
 
     return { filename, mimetype, encoding };
   }
