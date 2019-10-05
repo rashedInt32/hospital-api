@@ -98,10 +98,13 @@ const hospitalMutation = {
     let renameFile = filename.split('.');
     renameFile = 'name.' + last(renameFile);
 
-    const newfile = createWriteStream(
-      path.join(__dirname, "../../uploads", filename)
-    );
+    const filePath = path.join(__dirname, "../../uploads", filename)
+
+    const newfile = createWriteStream(filePath);
+
     await fileRead.pipe(newfile);
+
+
 
     return { filename, mimetype, encoding };
   }

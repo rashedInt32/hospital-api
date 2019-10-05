@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import { ApolloServer } from "apollo-server-express";
+import path from 'path';
 
 import verifyToken from '../utils/verifyToken';
 
@@ -40,8 +41,9 @@ const server = new ApolloServer({
   }
 });
 
-const path = "/graphql";
-server.applyMiddleware({ app, path });
+
+const apiPath = "/graphql";
+server.applyMiddleware({ app, apiPath });
 
 // PORT
 const PORT = process.env.PORT || 3900;
