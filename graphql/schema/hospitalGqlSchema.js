@@ -9,18 +9,16 @@ const typeDef = gql`
   scalar Upload
   input CreateHospital {
     name: String!
-    location: String
-    logo: String
-    coverphoto: String
-    specialties: [String]
-    doctors: [String]
   }
 
   input UpdateHospital {
     name: String
     location: String
+    description: String
     doctors: [String]
     specialties: [String]
+    logo: String
+    coverphoto: String
   }
 
   type Hospital {

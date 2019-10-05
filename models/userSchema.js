@@ -44,7 +44,8 @@ userSchema.methods.generateAuthToken = function() {
     _id: this._id,
     firstName: this.firstName,
     lastName: this.lastName,
-    role: this.role
+    role: this.role,
+    hospital: this.hospital
   }, config.JWT_SECRET, {});
 }
 

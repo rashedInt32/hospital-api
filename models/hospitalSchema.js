@@ -6,6 +6,11 @@ const hospitalSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  description: {
+    type: String
+  },
+  logo: String,
+  coverphoto: String,
   doctors: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Doctor'
@@ -14,8 +19,6 @@ const hospitalSchema = new mongoose.Schema({
   location: {
     type: String,
   },
-  logo: String,
-  coverPhoto: String
 })
 
 const Hospital = mongoose.model('Hospital', hospitalSchema);
