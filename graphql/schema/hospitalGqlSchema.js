@@ -104,9 +104,7 @@ const hospitalMutation = {
 
     await fileRead.pipe(newfile);
 
-
-
-    return { filename, mimetype, encoding };
+    return {filename};
   }
 };
 

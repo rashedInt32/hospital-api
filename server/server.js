@@ -45,6 +45,8 @@ const server = new ApolloServer({
 const apiPath = "/graphql";
 server.applyMiddleware({ app, apiPath });
 
+app.use('/img/', express.static(path.join(__dirname, '../uploads')));
+
 // PORT
 const PORT = process.env.PORT || 3900;
 // Listen server
