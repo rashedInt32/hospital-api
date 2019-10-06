@@ -82,7 +82,8 @@ const hospitalMutation = {
       name: update.name,
       location: update.location,
       specialties: union(hospital.specialties, update.specialties),
-      doctos: union(hospital.doctors, update.doctors)
+      doctos: union(hospital.doctors, update.doctors),
+      coverphoto: update.coverphoto
     });
 
     await hospital.save();
@@ -91,7 +92,7 @@ const hospitalMutation = {
   },
 
   async singleUpload(_, { file }) {
-    const { createReadStream, filename, mimetype, encoding } = await file;
+    const { createReadStream, filename} = await file;
 
     const fileRead = await createReadStream(file);
 
@@ -104,7 +105,7 @@ const hospitalMutation = {
 
     await fileRead.pipe(newfile);
 
-    return {filename};
+    return { filename };
   }
 };
 
