@@ -46,7 +46,7 @@ const typeDef = gql`
   extend type Mutation {
     addHospital(hospital: CreateHospital!): Hospital
     updateHospital(id: ID!, update: UpdateHospital!): Hospital
-    singleUpload(file: Upload!): File!
+    singleUpload(file: Upload!, id: ID!, type: String!): File!
   }
 `;
 
@@ -91,15 +91,15 @@ const hospitalMutation = {
     return hospital;
   },
 
-  async singleUpload(_, { file }) {
-    const { createReadStream, filename} = await file;
+  async singleUpload(_, { file, id, type }) {
+    let { createReadStream, filename } = await file;
 
     const fileRead = await createReadStream(file);
 
-    let renameFile = filename.split('.');
-    renameFile = 'name.' + last(renameFile);
+    filename = filename.split('.');
+    filename = `${type}${id}.${last(filename)}`;
 
-    const filePath = path.join(__dirname, "../../uploads", filename)
+    const filePath = path.join(__dirname, "../../uploads", filename);
 
     const newfile = createWriteStream(filePath);
 
