@@ -98,7 +98,9 @@ const hospitalMutation = {
     // Find previous uploaded file in upload folder
     const files = await fg(`**/${id}.${type}.*.*`);
     // If present previous file, remove
-    unlinkSync(path.join(__dirname, "../../", files[0]));
+    if (files.length > 0) {
+      unlinkSync(path.join(__dirname, "../../", files[0]));
+    }
 
     const fileRead = await createReadStream(file);
 
