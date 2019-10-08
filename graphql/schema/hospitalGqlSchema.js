@@ -13,6 +13,7 @@ const typeDef = gql`
   }
 
   input UpdateHospital {
+    id: ID!
     name: String
     location: String
     description: String
@@ -30,6 +31,7 @@ const typeDef = gql`
     coverphoto: String
     specialties: [String]
     doctors: [String]
+    description: String
   }
 
   type File {
@@ -77,17 +79,7 @@ const hospitalMutation = {
 
   async updateHospital(_, args) {
     const { id, update } = args;
-    let hospital = await Hospital.findById(id);
-
-    hospital.set({
-      name: update.name,
-      location: update.location,
-      specialties: union(hospital.specialties, update.specialties),
-      doctos: union(hospital.doctors, update.doctors),
-      coverphoto: update.coverphoto
-    });
-
-    await hospital.save();
+    let hospital = await Hospital.findByIdAndUpdate({ _id: id }, update);
 
     return hospital;
   },

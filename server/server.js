@@ -18,7 +18,8 @@ const app = express();
 // Connect db
 db.connect(dbUri, {
   useNewUrlParser: true,
-  useCreateIndex: true
+  useCreateIndex: true,
+  useFindAndModify: false
 });
 
 // Initialize body parser
