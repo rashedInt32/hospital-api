@@ -1,9 +1,10 @@
 import { gql } from "apollo-server-express";
+import glob from 'glob';
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
 import { union, last } from "lodash";
 
 import path from "path";
-import { createWriteStream } from "fs";
+import { createWriteStream, unlinkSync } from "fs";
 
 const typeDef = gql`
   scalar Upload
@@ -94,16 +95,31 @@ const hospitalMutation = {
   async singleUpload(_, { file, id, type }) {
     let { createReadStream, filename } = await file;
 
+    const previousUploadFile = glob(`**/${id}.${type}.*.*` , {}, function (er, files) {
+      unlinkSync(path.join(__dirname, "../../", files[0]));
+
+    });
+
     const fileRead = await createReadStream(file);
 
+
+
+
+    //unlinkSync(path.join(__dirname, "../../uploads", previousUploadFile));
+
+
+    const date = new Date();
+
     filename = filename.split('.');
-    filename = `${type}${id}.${last(filename)}`;
+    filename = `${id}.${type}.${date.getTime()}.${last(filename)}`;
 
     const filePath = path.join(__dirname, "../../uploads", filename);
 
     const newfile = createWriteStream(filePath);
 
     await fileRead.pipe(newfile);
+
+    console.log(filename);
 
     return { filename };
   }
