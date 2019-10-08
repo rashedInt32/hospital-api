@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-express";
-import glob from 'glob';
+import fg from 'fast-glob';
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
 import { union, last } from "lodash";
 
@@ -95,31 +95,25 @@ const hospitalMutation = {
   async singleUpload(_, { file, id, type }) {
     let { createReadStream, filename } = await file;
 
-    const previousUploadFile = glob(`**/${id}.${type}.*.*` , {}, function (er, files) {
-      unlinkSync(path.join(__dirname, "../../", files[0]));
-
-    });
+    // Find previous uploaded file in upload folder
+    const files = await fg(`**/${id}.${type}.*.*`);
+    // If present previous file, remove
+    unlinkSync(path.join(__dirname, "../../", files[0]));
 
     const fileRead = await createReadStream(file);
 
-
-
-
-    //unlinkSync(path.join(__dirname, "../../uploads", previousUploadFile));
-
-
+    // Renameing filename with id, type, and time
     const date = new Date();
-
     filename = filename.split('.');
     filename = `${id}.${type}.${date.getTime()}.${last(filename)}`;
 
+    // Add filepath to upload folder
     const filePath = path.join(__dirname, "../../uploads", filename);
 
+    // Writestream to the filepath
     const newfile = createWriteStream(filePath);
-
+    // pipe new file with readStream
     await fileRead.pipe(newfile);
-
-    console.log(filename);
 
     return { filename };
   }
