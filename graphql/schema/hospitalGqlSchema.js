@@ -54,9 +54,7 @@ const typeDef = gql`
 `;
 
 const resolvers = {
-  hospitals: async (_, args, context) => {
-    if (context.role !== "superadmin")
-      return new Error("You don't have permission");
+  hospitals: async () => {
     return await Hospital.find();
   },
   hospital: async (_, { id }) => await Hospital.findById(id),
@@ -103,6 +101,7 @@ const hospitalMutation = {
 
     // Add filepath to upload folder
     const filePath = path.join(__dirname, "../../uploads", filename);
+
 
     // Writestream to the filepath
     const newfile = createWriteStream(filePath);
