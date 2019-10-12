@@ -1,7 +1,8 @@
 import { gql } from "apollo-server-express";
 import fg from 'fast-glob';
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
-import { union, last } from "lodash";
+import { User } from "../../models/userSchema";
+import { last } from "lodash";
 
 import path from "path";
 import { createWriteStream, unlinkSync } from "fs";
@@ -43,6 +44,7 @@ const typeDef = gql`
   extend type Query {
     hospitals: [Hospital!]
     hospital(id: ID!): Hospital!
+    getHospitalUsers(id: ID!): [User]
     uploads: [File]
   }
 
@@ -59,7 +61,16 @@ const resolvers = {
   },
   hospital: async (_, { id }) => await Hospital.findById(id),
 
-  uploads: () => {}
+  uploads: () => { },
+  getHospitalUsers: async (_, args) => {
+    const { id } = args;
+    const users = await User.find({
+      $and: [
+        { hospital: id },
+        {role: 'manager'}
+      ]});
+    return users;
+  }
 };
 
 const hospitalMutation = {
@@ -109,7 +120,9 @@ const hospitalMutation = {
     await fileRead.pipe(newfile);
 
     return { filename };
-  }
+  },
+
+
 };
 
 export { typeDef, resolvers, hospitalMutation };
