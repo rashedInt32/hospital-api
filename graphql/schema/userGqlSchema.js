@@ -9,6 +9,7 @@ const typeDef = `
     role: String!
     password: String!
     hospital: ID!
+    pending: Boolean
   }
   type User {
     id: ID!,
@@ -18,6 +19,7 @@ const typeDef = `
     role: String!
     password: String!
     hospital: Hospital!
+    pending: Boolean
   }
 
   extend type Query {

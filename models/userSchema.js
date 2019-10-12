@@ -36,6 +36,10 @@ const userSchema = new mongoose.Schema({
   hospital: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Hospital'
+  },
+  pending: {
+    type: Boolean,
+    default: true
   }
 });
 
@@ -45,7 +49,8 @@ userSchema.methods.generateAuthToken = function() {
     firstName: this.firstName,
     lastName: this.lastName,
     role: this.role,
-    hospital: this.hospital
+    hospital: this.hospital,
+    pending: this.pending
   }, config.JWT_SECRET, {});
 }
 
@@ -58,7 +63,8 @@ const userValidate = (user) => {
     email: Joi.string().min(5).max(50).required().email(),
     password: Joi.string().min(5).max(1024).required(),
     role: Joi.string().required(),
-    hospital: Joi.string().required()
+    hospital: Joi.string().required(),
+    pending: Joi.boolean()
   }
 
   return Joi.validate(user, validateSchema);
