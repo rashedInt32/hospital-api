@@ -29,6 +29,7 @@ const typeDef = `
   extend type Mutation {
     addUser(userInput: CreateUser!): String!
     authUser(email: String!, password: String!): String!
+    updateUser(userInput: CreateUser!): User!
   }
 `;
 
@@ -74,6 +75,12 @@ const userMutation = {
 
     const token = user.generateAuthToken();
     return token;
+  },
+
+  async updateUser(_, args) {
+    const { userInput } = args;
+    const user = await User.findOneAndUpdate({ _id: userInput.id }, { userInput });
+    return user;
   }
 }
 
