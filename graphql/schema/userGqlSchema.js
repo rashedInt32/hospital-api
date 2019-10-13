@@ -30,7 +30,8 @@ const typeDef = `
     role: String!
     password: String!
     hospital: String!
-    pending: Boolean
+    pending: Boolean,
+    avatar: String
   }
 
   extend type Query {
