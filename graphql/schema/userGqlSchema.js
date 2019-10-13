@@ -11,6 +11,16 @@ const typeDef = `
     hospital: ID!
     pending: Boolean
   }
+  input UpdateUser {
+    id: ID!,
+    firstName: String,
+    lastName: String,
+    email: String,
+    role: String
+    password: String
+    hospital: ID
+    pending: Boolean
+  }
   type User {
     id: ID!,
     firstName: String!,
@@ -18,7 +28,7 @@ const typeDef = `
     email: String!,
     role: String!
     password: String!
-    hospital: Hospital!
+    hospital: String!
     pending: Boolean
   }
 
@@ -29,7 +39,7 @@ const typeDef = `
   extend type Mutation {
     addUser(userInput: CreateUser!): String!
     authUser(email: String!, password: String!): String!
-    updateUser(userInput: CreateUser!): User!
+    updateUser(userInput: UpdateUser!): User!
   }
 `;
 
@@ -79,7 +89,7 @@ const userMutation = {
 
   async updateUser(_, args) {
     const { userInput } = args;
-    const user = await User.findOneAndUpdate({ _id: userInput.id }, { userInput });
+    const user = await User.findByIdAndUpdate(userInput.id, userInput);
     return user;
   }
 }
