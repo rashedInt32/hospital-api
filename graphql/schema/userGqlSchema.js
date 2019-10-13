@@ -19,7 +19,8 @@ const typeDef = `
     role: String
     password: String
     hospital: ID
-    pending: Boolean
+    pending: Boolean,
+    avatar: String
   }
   type User {
     id: ID!,
@@ -34,6 +35,7 @@ const typeDef = `
 
   extend type Query {
     users: [User!]
+    user(id: ID!): User!
   }
 
   extend type Mutation {
@@ -45,6 +47,7 @@ const typeDef = `
 
 const resolvers = {
   users: async () => await User.find(),
+  user: async (_, {id}) => await User.findById(id),
 };
 
 const userMutation = {

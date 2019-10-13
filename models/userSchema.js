@@ -40,7 +40,8 @@ const userSchema = new mongoose.Schema({
   pending: {
     type: Boolean,
     default: true
-  }
+  },
+  avatar: String
 });
 
 userSchema.methods.generateAuthToken = function() {
@@ -50,7 +51,8 @@ userSchema.methods.generateAuthToken = function() {
     lastName: this.lastName,
     role: this.role,
     hospital: this.hospital,
-    pending: this.pending
+    pending: this.pending,
+    avatar: this.avatar
   }, config.JWT_SECRET, {});
 }
 
@@ -64,7 +66,8 @@ const userValidate = (user) => {
     password: Joi.string().min(5).max(1024).required(),
     role: Joi.string().required(),
     hospital: Joi.string().required(),
-    pending: Joi.boolean()
+    pending: Joi.boolean(),
+    avatar: Joi.string()
   }
 
   return Joi.validate(user, validateSchema);
