@@ -92,7 +92,11 @@ const userMutation = {
   },
 
   async updateUser(_, args) {
-    const { userInput } = args;
+    let { userInput } = args;
+    const salt = await bcrypt.getSalt(10);
+    const hash = await bcrypt.hash(userInput.password, salt);
+    userInput.password = hash;
+
     const user = await User.findByIdAndUpdate(userInput.id, userInput);
     return user;
   }
