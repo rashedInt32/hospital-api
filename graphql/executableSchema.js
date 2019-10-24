@@ -1,5 +1,5 @@
-import { makeExecutableSchema } from 'apollo-server-express';
-import { merge } from 'lodash';
+import { makeExecutableSchema } from "apollo-server-express";
+import { merge } from "lodash";
 
 import {
   typeDef as userQuery,
@@ -12,6 +12,12 @@ import {
   resolvers as hospitalResolvers,
   hospitalMutation
 } from "./schema/hospitalGqlSchema";
+
+import {
+  typeDef as doctorQuery,
+  resolvers as doctorResolvers,
+  doctorMutation
+} from "./schema/doctorGqlSchema";
 
 const Query = `
   type Query {
@@ -28,13 +34,13 @@ const Query = `
 `;
 
 const resolvers = {
-  Query: merge(userResolvers, hospitalResolvers),
-  Mutation: merge(userMutation, hospitalMutation)
+  Query: merge(userResolvers, hospitalResolvers, doctorResolvers),
+  Mutation: merge(userMutation, hospitalMutation, doctorMutation)
 };
 
 const rootQuery = makeExecutableSchema({
-  typeDefs: [Query, userQuery, hospitalQuery],
-  resolvers: merge(resolvers),
+  typeDefs: [Query, userQuery, hospitalQuery, doctorQuery],
+  resolvers: merge(resolvers)
 });
 
 export default rootQuery;
