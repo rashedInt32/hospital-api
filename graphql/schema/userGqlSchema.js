@@ -1,7 +1,8 @@
 import bcrypt from 'bcryptjs';
+import { gql } from 'apollo-server-express';
 import { User, userValidate, authValidate } from "../../models/userSchema";
 
-const typeDef = `
+const typeDef = gql`
   input CreateUser {
     firstName: String!,
     lastName: String!,

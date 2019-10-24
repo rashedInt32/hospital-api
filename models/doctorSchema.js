@@ -35,7 +35,8 @@ const doctorSchema = new mongoose.Schema({
   },
   avatar: String,
   specialties: [{type: String}],
-  availableDays: [{type: String}]
+  availableDays: [{type: String}],
+  phone: {type: String, required: true}
 });
 
 doctorSchema.methods.generateAuthToken = function() {
@@ -55,7 +56,7 @@ doctorSchema.methods.generateAuthToken = function() {
 
 const Doctor = mongoose.model("Doctor", doctorSchema);
 
-const userValidate = doctor => {
+const doctorValidate = doctor => {
   const validateSchema = {
     firstName: Joi.string()
       .min(5)
@@ -78,7 +79,8 @@ const userValidate = doctor => {
     hospital: Joi.string().required(),
     avatar: Joi.string(),
     specialties: Joi.array(),
-    availableDays: Joi.array()
+    availableDays: Joi.array(),
+    phone: Joi.string().required()
   };
 
   return Joi.validate(doctor, validateSchema);
@@ -95,4 +97,4 @@ const authValidate = doctor => {
   return Joi.validate(doctor, validateSchema);
 };
 
-export { Doctor, userValidate, authValidate };
+export { Doctor, doctorValidate, authValidate };
