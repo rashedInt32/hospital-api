@@ -22,6 +22,7 @@ const typeDef = gql`
     specialties: [String]
     avatar: String
     availableDay: [String]
+    phone: String
   }
   type Doctor {
     id: ID!,
@@ -34,6 +35,7 @@ const typeDef = gql`
     specialties: [String]
     avatar: String
     availableDay: [String]
+    phone: String
   }
 
   extend type Query {
@@ -70,7 +72,7 @@ const doctorMutation = {
     user = new Doctor(userInput);
     await user.save();
 
-    const token = doctor.generateAuthToken();
+    const token = user.generateAuthToken();
     return token;
   },
 
@@ -86,7 +88,7 @@ const doctorMutation = {
     let isPasswordMatch = bcrypt.compareSync(password, user.password);
     if (!isPasswordMatch) return new Error("Password not match");
 
-    const token = doctor.generateAuthToken();
+    const token = user.generateAuthToken();
     return token;
   },
 

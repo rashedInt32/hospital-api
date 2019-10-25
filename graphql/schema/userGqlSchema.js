@@ -22,6 +22,9 @@ const typeDef = gql`
     hospital: ID
     pending: Boolean,
     avatar: String
+    specialties: [String],
+    availableDays: [String],
+    phone: String
   }
   type User {
     id: ID!,
@@ -33,6 +36,9 @@ const typeDef = gql`
     hospital: String!
     pending: Boolean,
     avatar: String
+    specialties: [String],
+    availableDays: [String],
+    phone: String
   }
 
   extend type Query {

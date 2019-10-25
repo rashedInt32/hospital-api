@@ -41,7 +41,10 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: true
   },
-  avatar: String
+  avatar: String,
+  specialties: [{type: String}],
+  availableDays: [{type: String}],
+  phone: String
 });
 
 userSchema.methods.generateAuthToken = function() {
