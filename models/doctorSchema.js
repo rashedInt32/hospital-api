@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 
 const doctorSchema = new mongoose.Schema({
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "User"
+  doctor: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  }
 });
 
 

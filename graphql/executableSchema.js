@@ -16,7 +16,6 @@ import {
 import {
   typeDef as doctorQuery,
   resolvers as doctorResolvers,
-  doctorMutation
 } from "./schema/doctorGqlSchema";
 
 const Query = `
@@ -35,7 +34,7 @@ const Query = `
 
 const resolvers = {
   Query: merge(userResolvers, hospitalResolvers, doctorResolvers),
-  Mutation: merge(userMutation, hospitalMutation, doctorMutation)
+  Mutation: merge(userMutation, hospitalMutation)
 };
 
 const rootQuery = makeExecutableSchema({

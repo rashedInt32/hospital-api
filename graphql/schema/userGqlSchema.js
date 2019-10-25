@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { gql } from 'apollo-server-express';
 import { User, userValidate, authValidate } from "../../models/userSchema";
+import { Doctor } from '../../models/doctorSchema';
 
 const typeDef = gql`
   input CreateUser {
@@ -75,6 +76,8 @@ const userMutation = {
 
     user = new User(userInput);
     await user.save();
+
+    Doctor.create(user._id);
 
     const token = user.generateAuthToken();
     return token;
