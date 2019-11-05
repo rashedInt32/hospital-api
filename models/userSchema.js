@@ -7,13 +7,13 @@ import { config } from '../config';
 const userSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    minlength: 5,
+    minlength: 3,
     maxlength: 50,
     required: true
   },
   lastName: {
     type: String,
-    minlength: 5,
+    minlength: 3,
     maxlength: 50,
     required: true
   },
@@ -44,7 +44,8 @@ const userSchema = new mongoose.Schema({
   avatar: String,
   specialties: [{type: String}],
   availableDays: [{type: String}],
-  phone: String
+  phone: String,
+  bio: String
 });
 
 userSchema.methods.generateAuthToken = function() {
@@ -63,15 +64,33 @@ const User = mongoose.model('User', userSchema);
 
 const userValidate = (user) => {
   const validateSchema = {
-    firstName: Joi.string().min(5).max(50).required(),
-    lastName: Joi.string().min(5).max(50).required(),
-    email: Joi.string().min(5).max(50).required().email(),
-    password: Joi.string().min(5).max(1024).required(),
+    id: Joi.string(),
+    firstName: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
+    lastName: Joi.string()
+      .min(3)
+      .max(50)
+      .required(),
+    email: Joi.string()
+      .min(5)
+      .max(50)
+      .required()
+      .email(),
+    password: Joi.string()
+      .min(5)
+      .max(1024)
+      .required(),
     role: Joi.string().required(),
-    hospital: Joi.string().required(),
+    hospital: user.role !== 'superadmin' ? Joi.string().required() : Joi.string().allow(null),
     pending: Joi.boolean(),
-    avatar: Joi.string()
-  }
+    avatar: Joi.string().allow(null),
+    bio: Joi.string().allow(null),
+    specialties: Joi.array(),
+    availableDays: Joi.array(),
+    phone: Joi.string().allow(null)
+  };
 
   return Joi.validate(user, validateSchema);
 }

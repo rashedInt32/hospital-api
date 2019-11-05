@@ -2,8 +2,9 @@ import { gql } from "apollo-server-express";
 import fg from 'fast-glob';
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
 import { User } from "../../models/userSchema";
-import { last } from "lodash";
+import { Doctor } from "../../models/doctorSchema";
 
+import { last } from "lodash";
 import path from "path";
 import { createWriteStream, unlinkSync } from "fs";
 
@@ -31,7 +32,7 @@ const typeDef = gql`
     logo: String
     coverphoto: String
     specialties: [String]
-    doctors: [String]
+    doctors: [User]
     description: String
   }
 
@@ -59,7 +60,10 @@ const resolvers = {
   hospitals: async () => {
     return await Hospital.find();
   },
-  hospital: async (_, { id }) => await Hospital.findById(id),
+  hospital: async (_, { id }) => await Hospital.findById(id).populate({
+    path: 'doctors',
+    model: User
+  }),
 
   uploads: () => { },
   getHospitalUsers: async (_, args) => {
@@ -67,7 +71,8 @@ const resolvers = {
     const users = await User.find({
       $and: [
         { hospital: id },
-        {role: 'manager'}
+        { $or: [{role: 'manager'}, {role: 'doctor'}]},
+
       ]});
     return users;
   }

@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import { ApolloServer } from "apollo-server-express";
 import path from 'path';
+import omit from 'lodash';
 
 import verifyToken from '../utils/verifyToken';
 

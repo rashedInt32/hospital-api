@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs';
 import { gql } from 'apollo-server-express';
 import { User, userValidate, authValidate } from "../../models/userSchema";
 import { Doctor } from '../../models/doctorSchema';
+import { Hospital } from "../../models/hospitalSchema";
 
 const typeDef = gql`
   input CreateUser {
@@ -15,9 +16,9 @@ const typeDef = gql`
   }
   input UpdateUser {
     id: ID!,
-    firstName: String,
-    lastName: String,
-    email: String,
+    firstName: String!,
+    lastName: String!,
+    email: String!,
     role: String
     password: String
     hospital: ID
@@ -25,7 +26,8 @@ const typeDef = gql`
     avatar: String
     specialties: [String],
     availableDays: [String],
-    phone: String
+    phone: String,
+    bio: String
   }
   type User {
     id: ID!,
@@ -40,6 +42,7 @@ const typeDef = gql`
     specialties: [String],
     availableDays: [String],
     phone: String
+    bio: String
   }
 
   extend type Query {
@@ -77,7 +80,12 @@ const userMutation = {
     user = new User(userInput);
     await user.save();
 
-    Doctor.create(user._id);
+    if (user.role === 'doctor') {
+      Doctor.create({doctor: user._id});
+      let hospital = await Hospital.findById(user.hospital);
+      hospital.doctors = [...hospital.doctors, user._id];
+      hospital.save();
+    }
 
     const token = user.generateAuthToken();
     return token;
@@ -103,6 +111,8 @@ const userMutation = {
 
   async updateUser(_, args) {
     let { userInput } = args;
+    const { error } = userValidate(userInput);
+    if (error !==null) return new Error(error.details[0].message);
 
     const user = await User.findById(userInput.id);
 

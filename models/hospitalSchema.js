@@ -13,7 +13,7 @@ const hospitalSchema = new mongoose.Schema({
   coverphoto: String,
   doctors: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Doctor'
+    ref: 'User'
   }],
   specialties: [{type: String}],
   location: {
