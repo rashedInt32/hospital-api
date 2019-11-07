@@ -11,10 +11,6 @@ const hospitalSchema = new mongoose.Schema({
   },
   logo: String,
   coverphoto: String,
-  doctors: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User'
-  }],
   specialties: [{type: String}],
   location: {
     type: String,

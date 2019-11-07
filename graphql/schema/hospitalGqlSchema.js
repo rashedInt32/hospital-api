@@ -19,7 +19,6 @@ const typeDef = gql`
     name: String
     location: String
     description: String
-    doctors: [String]
     specialties: [String]
     logo: String
     coverphoto: String
@@ -32,7 +31,6 @@ const typeDef = gql`
     logo: String
     coverphoto: String
     specialties: [String]
-    doctors: [User]
     description: String
   }
 
@@ -60,10 +58,7 @@ const resolvers = {
   hospitals: async () => {
     return await Hospital.find();
   },
-  hospital: async (_, { id }) => await Hospital.findById(id).populate({
-    path: 'doctors',
-    model: User
-  }),
+  hospital: async (_, { id }) => await Hospital.findById(id),
 
   uploads: () => { },
   getHospitalUsers: async (_, args) => {
