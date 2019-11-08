@@ -55,10 +55,14 @@ const typeDef = gql`
 `;
 
 const resolvers = {
-  hospitals: async () => {
-    return await Hospital.find();
+  hospitals: async (_, args, context) => {
+    console.log('context', context.user);
+    if (context === null || context !== null) {
+      return await Hospital.find();
+    }
   },
-  hospital: async (_, { id }) => await Hospital.findById(id),
+  hospital: async (_, { id }) =>
+    await Hospital.findById(id),
 
   uploads: () => { },
   getHospitalUsers: async (_, args) => {

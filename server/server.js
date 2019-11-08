@@ -35,11 +35,11 @@ const server = new ApolloServer({
     status: err.status
   }),
   introspection: true,
-  // context: async ({ req, res }) => {
-  //   const user = await verifyToken(req, res);
-  //   console.log(user);
-  //   return user;
-  // }
+  context: async ({ req, res }) => {
+    const user = await verifyToken(req, res);
+    console.log(user);
+    return { user };
+  }
 });
 
 

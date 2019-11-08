@@ -4,6 +4,10 @@ import { config } from '../config';
 const verifyToken = async (req, res) => {
   const token = req.headers['x-auth-token'] || '';
 
+  console.log(res);
+
+  if (req.body.operationName === 'LoginUser') return;
+
   if (!token)
     throw new Error("Access denied, no token provided");
 
