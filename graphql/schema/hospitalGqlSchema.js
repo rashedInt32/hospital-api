@@ -56,7 +56,6 @@ const typeDef = gql`
 
 const resolvers = {
   hospitals: async (_, args, context) => {
-    console.log('context', context);
     if (context.user || context.user === undefined) {
       return await Hospital.find();
     }

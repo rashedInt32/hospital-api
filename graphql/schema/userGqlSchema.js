@@ -36,7 +36,7 @@ const typeDef = gql`
     email: String!,
     role: String!
     password: String!
-    hospital: String!
+    hospital: String
     pending: Boolean,
     avatar: String
     specialties: [String],

@@ -5,7 +5,7 @@ import { ignoreMutation, ignoreQuery } from './ignoreContext';
 
 const verifyToken = async (req, res) => {
   const token = req.headers['x-auth-token'] || '';
-  //console.log(JSON.parse(req.body.query));
+
   const isNamedQuery = _.last(req.headers.referer.split('/'));
 
   const isIgnoredQuery = _.includes(ignoreQuery, isNamedQuery)
