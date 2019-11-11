@@ -1,4 +1,4 @@
-import { gql } from "apollo-server-express";
+import gql  from "graphql-tag";
 import fg from 'fast-glob';
 import { Hospital, validateHospital } from "../../models/hospitalSchema";
 import { User } from "../../models/userSchema";
@@ -56,8 +56,8 @@ const typeDef = gql`
 
 const resolvers = {
   hospitals: async (_, args, context) => {
-    console.log('context', context.user);
-    if (context === null || context !== null) {
+    console.log('context', context);
+    if (context.user || context.user === undefined) {
       return await Hospital.find();
     }
   },

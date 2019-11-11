@@ -1,18 +1,24 @@
 import jwt from 'jsonwebtoken';
+import _ from 'lodash';
 import { config } from '../config';
+import { ignoreMutation, ignoreQuery } from './ignoreContext';
 
 const verifyToken = async (req, res) => {
   const token = req.headers['x-auth-token'] || '';
+  //console.log(JSON.parse(req.body.query));
+  const isNamedQuery = _.last(req.headers.referer.split('/'));
 
-  console.log(res);
+  const isIgnoredQuery = _.includes(ignoreQuery, isNamedQuery)
 
-  if (req.body.operationName === 'LoginUser') return;
+  const isIgnoredMutation = _.includes(ignoreMutation, req.body.operationName)
+
+  if (isIgnoredMutation || isIgnoredQuery) return;
 
   if (!token)
     throw new Error("Access denied, no token provided");
 
   try {
-    const decode = await jwt.verify(token, config.JWT_SECRET);
+    const decode = jwt.verify(token, config.JWT_SECRET);
 
     return decode;
 

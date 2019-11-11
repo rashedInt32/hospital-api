@@ -1,4 +1,6 @@
 const ignoreMutation = ["LoginUser", "AddUser"];
-const ignoreQuery = ['hospitals'];
+const ignoreQuery = [
+  'register',
+];
 
 export { ignoreMutation, ignoreQuery };

@@ -1,5 +1,6 @@
 import { makeExecutableSchema } from "apollo-server-express";
 import { merge } from "lodash";
+import gql from 'graphql-tag';
 
 import {
   typeDef as userQuery,
@@ -18,7 +19,7 @@ import {
   resolvers as doctorResolvers,
 } from "./schema/doctorGqlSchema";
 
-const Query = `
+const Query = gql`
   type Query {
     _empty: String
   }

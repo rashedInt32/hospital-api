@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { gql } from 'apollo-server-express';
+import gql from 'graphql-tag';
 import { User, userValidate, authValidate } from "../../models/userSchema";
 import { Doctor } from '../../models/doctorSchema';
 import { Hospital } from "../../models/hospitalSchema";
