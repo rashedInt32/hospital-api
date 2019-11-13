@@ -45,6 +45,7 @@ const typeDef = gql`
     hospital(id: ID!): Hospital!
     getHospitalUsers(id: ID!): [User]
     uploads: [File]
+    getHospitalAdmin(id: ID!): [User]
   }
 
   extend type Mutation {
@@ -55,11 +56,9 @@ const typeDef = gql`
 `;
 
 const resolvers = {
-  hospitals: async (_, args, context) => {
-    if (context.user || context.user === undefined) {
-      return await Hospital.find();
-    }
-  },
+  hospitals: async () =>
+     await Hospital.find(),
+
   hospital: async (_, { id }) =>
     await Hospital.findById(id),
 
@@ -71,6 +70,16 @@ const resolvers = {
         { hospital: id },
         { $or: [{role: 'manager'}, {role: 'doctor'}]},
 
+      ]});
+    return users;
+  },
+
+  getHospitalAdmin: async (_, args) => {
+    const { id } = args;
+    const users = await User.find({
+      $and: [
+        { hospital: id },
+        {role: 'admin'},
       ]});
     return users;
   }
