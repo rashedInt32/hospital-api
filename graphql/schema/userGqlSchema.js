@@ -54,6 +54,7 @@ const typeDef = gql`
     addUser(userInput: CreateUser!): String!
     authUser(email: String!, password: String!): String!
     updateUser(userInput: UpdateUser!): User!
+    removeUser(id: ID!): String!
   }
 `;
 
@@ -125,7 +126,13 @@ const userMutation = {
 
     const updateUser = await User.findByIdAndUpdate(userInput.id, userInput);
     return updateUser;
+  },
+
+  async removeUser(_, {id}) {
+    await User.findByIdAndRemove(id);
+    return "User remove successfully";
   }
+
 }
 
 export { typeDef, resolvers, userMutation };
