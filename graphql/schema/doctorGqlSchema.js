@@ -33,7 +33,7 @@ const resolvers = {
       path: "doctor",
       model: User
     });
-    console.log(doctors);
+
     return doctors;
   },
   doctor: async (_, { id }) => await Doctor.findById(id).populate()
