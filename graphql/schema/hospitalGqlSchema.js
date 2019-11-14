@@ -56,8 +56,10 @@ const typeDef = gql`
 `;
 
 const resolvers = {
-  hospitals: async () =>
-     await Hospital.find(),
+  hospitals: async (_, context) => {
+    if (context.user !== null || context.user === null)
+      return await Hospital.find();
+  },
 
   hospital: async (_, { id }) =>
     await Hospital.findById(id),

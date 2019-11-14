@@ -1,30 +1,27 @@
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import { config } from '../config';
-import { ignoreMutation, ignoreQuery } from './ignoreContext';
+import { ignoreProtectedUrl } from "./ignoreContext";
 
 const verifyToken = async (req, res) => {
   const token = req.headers['x-auth-token'] || '';
 
-  const isNamedQuery = _.last(req.headers.referer.split('/'));
+  const protectedUrl = _.last(req.headers.referer.split('/'));
 
-  const isIgnoredQuery = _.includes(ignoreQuery, isNamedQuery)
+  const shouldIgnoredUrlWithoutAuth = _.includes(ignoreProtectedUrl, protectedUrl);
 
-  const isIgnoredMutation = _.includes(ignoreMutation, req.body.operationName)
+  if (shouldIgnoredUrlWithoutAuth) {
+    if (!token) throw new Error("Access denied, no token provided");
 
-  if (isIgnoredMutation || isIgnoredQuery) return;
+    try {
+      const decode = jwt.verify(token, config.JWT_SECRET);
 
-  if (!token)
-    throw new Error("Access denied, no token provided");
-
-  try {
-    const decode = jwt.verify(token, config.JWT_SECRET);
-
-    return decode;
-
-  } catch (ex) {
-    throw new Error("Invalid Token");
+      return decode;
+    } catch (ex) {
+      throw new Error("Invalid Token");
+    }
   }
+  return;
 }
 
 export default verifyToken;

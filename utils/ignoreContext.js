@@ -1,6 +1,3 @@
-const ignoreMutation = ["LoginUser", "AddUser"];
-const ignoreQuery = [
-  'register',
-];
+const ignoreProtectedUrl = ["dashboard", "hospital", "create", "users", "profile"];
 
-export { ignoreMutation, ignoreQuery };
+export { ignoreProtectedUrl };
