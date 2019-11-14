@@ -4,10 +4,10 @@ import { User } from '../../models/userSchema';
 
 const typeDef = gql`
   type Doctor {
-    id: ID!,
-    firstName: String!,
-    lastName: String!,
-    email: String!,
+    id: ID!
+    firstName: String!
+    lastName: String!
+    email: String!
     role: String!
     password: String!
     hospital: String!
@@ -17,17 +17,25 @@ const typeDef = gql`
     phone: String
   }
 
+  type doctorObject {
+    doctor: Doctor!
+  }
+
   extend type Query {
-    doctors: [Doctor!]
+    doctors: [doctorObject!]
     doctor(id: ID!): Doctor!
   }
 `;
 
 const resolvers = {
-  doctors: async () => await Doctor.find().populate({
-    path: 'doctor',
-    model: User
-  }),
+  doctors: async () => {
+    const doctors = await Doctor.find().populate({
+      path: "doctor",
+      model: User
+    });
+    console.log(doctors);
+    return doctors;
+  },
   doctor: async (_, { id }) => await Doctor.findById(id).populate()
 };
 
